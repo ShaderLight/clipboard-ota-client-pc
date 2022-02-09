@@ -33,10 +33,31 @@ class Clipboard_conn:
 
         return r.json()
 
-    def is_connected(self):
-        r = requests.get(self.resource_url)
+    def connection_test(self):
+        try:
+            r = self.post_clipboard('test')
+            assert r['text'] == 'test'
 
-        return r.status_code == 200
+            r = self.get_clipboard()
+            assert r['text'] == 'test'
+
+            r = self.delete_clipboard()
+            assert r['text'] == ''
+
+        except:
+            return False
+
+        return True
+
+    def change_url(self, new_url):
+        old_url = self.resource_url
+        self.resource_url = new_url + '/api/clipboard'
+
+        if self.connection_test():
+            logging.debug('Connection test succeded, url changed.')
+        else:
+            logging.debug('Connection test failed, reverting url.')
+            self.resource_url = old_url
 
 
 class ConnectionThread(Thread):
