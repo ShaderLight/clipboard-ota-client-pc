@@ -15,7 +15,7 @@ class Clipboard_conn:
         logging.debug('GET Request against {} with status code {}'.format(self.resource_url, r.status_code))
         assert r.status_code == 200
 
-        return r.content
+        return r.json()
 
     def post_clipboard(self, text):
         r = requests.post(self.resource_url, json={'text': text})
@@ -23,7 +23,7 @@ class Clipboard_conn:
         logging.debug('POST Request against {} with status code {}'.format(self.resource_url, r.status_code))
         assert r.status_code == 201
 
-        return r.content
+        return r.json()
 
     def delete_clipboard(self):
         r = requests.delete(self.resource_url)
@@ -31,7 +31,7 @@ class Clipboard_conn:
         logging.debug('DELETE Request against {} with status code {}'.format(self.resource_url, r.status_code))
         assert r.status_code == 200
 
-        return r.content
+        return r.json()
 
     def is_connected(self):
         r = requests.get(self.resource_url)

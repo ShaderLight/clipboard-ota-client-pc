@@ -8,6 +8,4 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', datefmt=
 
 client = gui.Client()
 
-app = client.render_gui()
-
-app.mainloop()
+client.window.mainloop()
