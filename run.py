@@ -6,8 +6,8 @@ from modules import server_requests
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.DEBUG)
 
-server_url = input('Input server URL: ')
+client = gui.Client()
 
-conn = server_requests.Clipboard_conn(server_url)
+app = client.render_gui()
 
-gui.render_gui(conn)
+app.mainloop()
