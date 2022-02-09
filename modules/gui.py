@@ -27,8 +27,8 @@ class Client():
         self.post_button = tk.Button(window, text='Send clipboard', command=lambda: self.request_handler('post'))
         self.post_button.grid(column=1, row=2, padx=5, pady=5)
 
-        del_button = tk.Button(window, text='Delete clipboard', command=lambda: self.request_handler('delete'))
-        del_button.grid(column=2, row=2, padx=5, pady=5)
+        self.del_button = tk.Button(window, text='Delete clipboard', command=lambda: self.request_handler('delete'))
+        self.del_button.grid(column=2, row=2, padx=5, pady=5)
 
         self.debug_clipboard_box = tk.Text(window, height=20, width=50)
         self.debug_clipboard_box.grid(column=1, row=3, padx=5, pady=5)
@@ -68,4 +68,4 @@ class Client():
         else:
             for button in self.button_list:
                 button.configure(state='normal')
-            self.buttons_enabled = False
+            self.buttons_enabled = True
