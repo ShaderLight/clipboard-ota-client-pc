@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import logging
+import os
 
 from .server_requests import Clipboard_conn, ConnectionThread
 from .clipboard import insert_text, get_text
@@ -10,6 +11,7 @@ class Client():
         self.conn = Clipboard_conn(server_url)
         self.buttons_enabled = True
         self.window = self.render_gui()
+        self.render_menu()
 
     def render_gui(self):
         window = tk.Tk()
@@ -36,6 +38,24 @@ class Client():
         self.button_list = [self.get_button, self.post_button, self.del_button]
 
         return window
+
+    def render_menu(self):
+        self.menu_bar = tk.Menu(self.window)
+        self.settings_menu = tk.Menu(self.menu_bar)
+        self.help_menu = tk.Menu(self.menu_bar)
+
+        self.settings_menu.add_command(label='Sync')
+        self.settings_menu.add_command(label='Server')
+        self.settings_menu.add_separator()
+        self.settings_menu.add_command(label='Force sync')
+
+        self.help_menu.add_command(label='About ClipboardOTA', command=self.render_about_window)
+        self.help_menu.add_command(label='GitHub repo', command=self.open_gh_page)
+
+        self.menu_bar.add_cascade(label='Settings', menu=self.settings_menu)
+        self.menu_bar.add_cascade(label='Help', menu=self.help_menu)
+
+        self.window.config(menu=self.menu_bar)
 
     def request_handler(self, method):
         self.toggle_buttons()
@@ -69,3 +89,16 @@ class Client():
             for button in self.button_list:
                 button.configure(state='normal')
             self.buttons_enabled = True
+
+    def open_gh_page(self):
+        os.system("start \"\" https://github.com/ShaderLight/clipboard-ota-client-pc")
+
+    def render_about_window(self, width=400, height=200):
+        about_window = tk.Toplevel(self.window)
+        title_label = tk.Label(about_window, text='Clipboard Over The Air\n v0.0.1\nby ShaderLight\n under MIT License')
+        title_label.grid(column=1, row=0, padx=5, pady=5)
+
+        about_window.title('About Clipboard OTA')
+        about_window.geometry(f"{width}x{height}+{self.window.winfo_x() + int((self.window.winfo_width()-width)/2)}+{self.window.winfo_y() + int((self.window.winfo_height()-height)/2)}")
+
+
