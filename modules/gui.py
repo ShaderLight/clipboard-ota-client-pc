@@ -3,6 +3,8 @@ import tkinter.ttk as ttk
 import logging
 import os
 
+from matplotlib.pyplot import text
+
 from .server_requests import Clipboard_conn, ConnectionThread
 from .clipboard import insert_text, get_text
 
@@ -19,9 +21,6 @@ class Client():
 
         title_label = tk.Label(window, text='Clipboard Over The Air')
         title_label.grid(column=1, row=0, padx=5, pady=5)
-
-        url_box = tk.Text(window, height=1, width=50)
-        url_box.grid(column=1, row=1, padx=5, pady=5)
 
         self.get_button = tk.Button(window, text='Get clipboard', command=lambda: self.request_handler('get'))
         self.get_button.grid(column=0, row=2, padx=5, pady=5)
@@ -45,9 +44,7 @@ class Client():
         self.help_menu = tk.Menu(self.menu_bar)
 
         self.settings_menu.add_command(label='Sync')
-        self.settings_menu.add_command(label='Server')
-        self.settings_menu.add_separator()
-        self.settings_menu.add_command(label='Force sync')
+        self.settings_menu.add_command(label='Server', command=self.render_server_window)
 
         self.help_menu.add_command(label='About ClipboardOTA', command=self.render_about_window)
         self.help_menu.add_command(label='GitHub repo', command=self.open_gh_page)
@@ -101,4 +98,23 @@ class Client():
         about_window.title('About Clipboard OTA')
         about_window.geometry(f"{width}x{height}+{self.window.winfo_x() + int((self.window.winfo_width()-width)/2)}+{self.window.winfo_y() + int((self.window.winfo_height()-height)/2)}")
 
+    def render_sync_window(self, width=400, height=400):
+        sync_window = tk.Toplevel(self.window)
+        title_label = tk.Label(sync_window, text='Sync settings')
 
+        sync_window.title('Sync settings')
+        sync_window.geometry(f"{width}x{height}+{self.window.winfo_x() + int((self.window.winfo_width()-width)/2)}+{self.window.winfo_y() + int((self.window.winfo_height()-height)/2)}")
+
+    def render_server_window(self, width=400, height=400):
+        server_window = tk.Toplevel(self.window)
+        title_label = tk.Label(server_window, text='Server URL')
+        title_label.grid(column=1, row=0, padx=5, pady=5)
+
+        url_box = tk.Text(server_window, height=1, width=50)
+        url_box.grid(column=1, row=1, padx=5, pady=5)
+
+        change_url_button = tk.Button(server_window, text='Change URL')
+        change_url_button.grid(column=1, row=2, padx=5, pady=5)
+
+        server_window.title('Server settings')
+        server_window.geometry(f"{width}x{height}+{self.window.winfo_x() + int((self.window.winfo_width()-width)/2)}+{self.window.winfo_y() + int((self.window.winfo_height()-height)/2)}")
