@@ -1,9 +1,11 @@
+import pystray
+
 import tkinter as tk
 import tkinter.ttk as ttk
 import logging
 import os
+from PIL import Image, ImageTk
 
-from matplotlib.pyplot import text
 
 from .server_requests import Clipboard_conn, ConnectionThread
 from .clipboard import insert_text, get_text
@@ -14,6 +16,10 @@ class Client():
         self.buttons_enabled = True
         self.window = self.render_gui()
         self.render_menu()
+        self.icon_image=Image.open('favicon.png')
+
+        self.window.protocol('WM_DELETE_WINDOW', self.hide_to_tray)
+        self.window.iconphoto(True, tk.PhotoImage(file='favicon.png'))
 
     def render_gui(self):
         window = tk.Tk()
@@ -118,3 +124,17 @@ class Client():
 
         server_window.title('Server settings')
         server_window.geometry(f"{width}x{height}+{self.window.winfo_x() + int((self.window.winfo_width()-width)/2)}+{self.window.winfo_y() + int((self.window.winfo_height()-height)/2)}")
+
+    def hide_to_tray(self):
+        self.window.withdraw()
+        menu = (pystray.MenuItem('Show', self.show_window, default=True), pystray.MenuItem('Close', self.terminate))
+        icon = pystray.Icon('name', self.icon_image, 'ClipboardOTA', menu)
+        icon.run()
+
+    def terminate(self, icon, item):
+        icon.stop()
+        self.window.destroy()
+
+    def show_window(self, icon, item):
+        icon.stop()
+        self.window.after(0, self.window.deiconify())
