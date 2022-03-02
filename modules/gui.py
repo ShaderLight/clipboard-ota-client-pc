@@ -114,13 +114,14 @@ class Client():
     def render_server_window(self, width=400, height=400):
         server_window = tk.Toplevel(self.window)
         title_label = tk.Label(server_window, text='Server URL')
-        title_label.grid(column=1, row=0, padx=5, pady=5)
+        title_label.pack(padx=5, pady=5)
 
-        url_box = tk.Text(server_window, height=1, width=50)
-        url_box.grid(column=1, row=1, padx=5, pady=5)
+        url_box = tk.Entry(server_window)
+        url_box.insert(tk.END, self.conn.resource_url)
+        url_box.pack(padx=5, pady=5, fill='both')
 
         change_url_button = tk.Button(server_window, text='Change URL')
-        change_url_button.grid(column=1, row=2, padx=5, pady=5)
+        change_url_button.pack(padx=5, pady=5)
 
         server_window.title('Server settings')
         server_window.geometry(f"{width}x{height}+{self.window.winfo_x() + int((self.window.winfo_width()-width)/2)}+{self.window.winfo_y() + int((self.window.winfo_height()-height)/2)}")
